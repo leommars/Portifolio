@@ -1,656 +1,207 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-    <!-- Configurações básicas do documento -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Leonardo Marques</title>
-    
-    <!-- Importação de fontes externas -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comforter+Brush&family=Lacquer&family=Monofett&family=Hanuman:wght@100;300;400;700;900&display=swap">
-    <!-- Ícones do Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leonardo Marques — Web Developer</title>
+<meta name="description" content="Desenvolvedor web front end e UI/UX. Interfaces rápidas, acessíveis e bem desenhadas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=JetBrains+Mono:wght@400;500&family=Figtree:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0E0F0C;--card:#161713;--line:#2A2B25;--text:#EDEBE4;--muted:#A3A399;--dim:#6E6F66;--accent:#C6F432;
+--display:'Bricolage Grotesque',sans-serif;--mono:'JetBrains Mono',monospace;--pad:max(6vw,20px)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.6 Figtree,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 var(--pad);position:relative;z-index:1}
 
-    <style>
-        /* ========== ESTILOS GLOBAIS ========== */
-        body {
-            margin: 0; /* Remove margens padrão */
-            font-family: sans-serif; /* Fonte padrão */
-            background-color: #e2d7d7; /* Cor de fundo */
-            overflow: hidden; /* Desabilita scroll global */
-        }
+/* fundo: grade estática + brilho que segue o cursor */
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+background-image:linear-gradient(rgba(237,235,228,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(237,235,228,.05) 1px,transparent 1px);
+background-size:48px 48px;-webkit-mask-image:linear-gradient(#000,transparent 80%);mask-image:linear-gradient(#000,transparent 80%)}
+.glow{position:fixed;left:0;top:0;width:560px;height:560px;margin:-280px 0 0 -280px;border-radius:50%;z-index:0;pointer-events:none;
+background:radial-gradient(circle,var(--accent) 0%,transparent 65%);opacity:.14;transform:translate(var(--x,60vw),var(--y,20vh));will-change:transform}
+@media (pointer:coarse){.glow{display:none}}
 
-        /* ========== CABEÇALHO ========== */
-        /* Logo no canto superior esquerdo */
-        .logo-top-left {
-            position: fixed;
-            top: 8px;
-            left: 30px;
-            font-family: 'Monofett', sans-serif;
-            font-size: 50px;
-            color: #333;
-            text-shadow: 0px 4px 5px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-            cursor: pointer;
-        }
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding:28px 0}
+.logo{font:500 18px var(--mono)}
+.logo span{color:var(--accent)}
+nav{display:flex;flex-wrap:wrap;gap:28px;font:14px var(--mono);color:var(--muted)}
 
-        /* Textos informativos no topo */
-        .info-top-left,
-        .info-top-right,
-        .center-top {
-            position: fixed;
-            color: #333;
-            font-size: 12px;
-            font-weight: 400;
-            text-shadow: 0px 4px 5px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-        }
+/* hero com chuva de código */
+.hero{position:relative}
+#rain{position:absolute;left:50%;top:0;width:100vw;height:100%;transform:translateX(-50%);z-index:0;pointer-events:none;opacity:.55;
+-webkit-mask-image:linear-gradient(#000 40%,transparent);mask-image:linear-gradient(#000 40%,transparent)}
+.hero-in{display:flex;flex-wrap:wrap;gap:56px;align-items:center;padding:72px 0 110px;position:relative;z-index:1}
+.hero-text{flex:1 1 420px}
+.tag{margin:0 0 20px;font:14px var(--mono);color:var(--accent)}
+h1{margin:0;font:800 clamp(44px,7vw,88px)/1 var(--display);letter-spacing:-.03em}
+.lead{margin:28px 0 0;max-width:520px;color:var(--muted);font-size:19px}
+.btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:0 26px;border-radius:8px;border:1px solid #3A3B34;font-weight:500}
+.btn.main{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.btn.main:hover{color:var(--bg);filter:brightness(1.1)}
+.code{flex:1 1 360px;background:rgba(22,23,19,.85);border:1px solid var(--line);border-radius:14px;padding:28px;font:14px/1.9 var(--mono);color:var(--muted);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.code i{font-style:normal;color:var(--dim)}.code b{font-weight:400;color:var(--accent)}.code p{margin:0;padding-left:24px}.code div{margin:0}
 
-        /* Posicionamento específico para cada elemento do cabeçalho */
-        .info-top-left {
-            top: 25px;
-            left: 128px;
-            text-align: left;
-        }
+section{padding:32px 0 96px}
+.head{display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;justify-content:space-between;margin-bottom:36px}
+h2{margin:0;font:700 40px var(--display);letter-spacing:-.02em}
+.count{font:14px var(--mono);color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card.empty{border-style:dashed;border-color:#3A3B34}
+.shot{height:220px;background:#1F2119;display:flex;align-items:center;justify-content:center;font:13px var(--mono);color:var(--dim)}
+.shot img{width:100%;height:100%;object-fit:cover;display:block}
+.card.empty .shot{background:none}
+.body{padding:26px}
+h3{margin:0 0 8px;font:500 24px var(--display)}
+.body p{margin:0 0 18px;color:var(--muted)}
+.stack{font:13px var(--mono);color:var(--accent)!important}
+.more{font:14px var(--mono);border-bottom:1px solid #3A3B34}
 
-        .center-top {
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+.about{display:flex;flex-wrap:wrap;gap:48px;border-top:1px solid var(--line);padding-top:80px}
+.about h2{flex:1 1 280px}
+.about p{flex:2 1 420px;margin:0;color:var(--muted)}
 
-        .info-top-right {
-            top: 25px;
-            right: 125px;
-            text-align: right;
-        }
-
-        /* ========== BARRA SOCIAL ========== */
-        .social-bar-left {
-            position: fixed;
-            left: 40px;
-            top: 60%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            z-index: 10;
-        }
-
-        .social-bar-left a {
-            font-size: 38px;
-            color: #333;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-
-        .social-bar-left a:hover {
-            opacity: 1;
-        }
-
-        /* ========== CONTEÚDO PRINCIPAL ========== */
-        .content {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        /* Efeito de fundo blur */
-        .fundo-blur {
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            z-index: 0;
-        }
-
-        /* ========== TELA DE ERRO 404 ========== */
-        .error {
-            font-family: 'Lacquer', sans-serif;
-            font-size: 260px;
-            color: #333;
-            text-shadow: 2px 2px 0 #ff00c1, -2px -2px 0 #00fff2;
-            position: absolute;
-            top: 27%;
-            left: 45%;
-            transform: translate(-50%, -50%);
-            z-index: 1;
-            transition: all 0.3s ease;
-        }
-
-        .error:hover {
-            animation: glitch-animation 0.5s;
-        }
-
-        /* Número 404 */
-        .number {
-            font-family: 'Hanuman', sans-serif;
-            font-size: 80px;
-            position: absolute;
-            top: 55%;
-            left: 107%;
-            transform: translate(-50%, -50%);
-            color: rgba(51, 51, 51, 0.99);
-        }
-
-        /* Link para o portfólio */
-        .portfolio-link {
-            font-family: 'Comforter Brush', cursive;
-            color: #ff5e00;
-            font-size: 70px;
-            position: absolute;
-            top: 70%;
-            left: 45%;
-            transform: translate(-50%, -50%) rotate(-5deg);
-            letter-spacing: 2px;
-            text-decoration: none;
-            transition: color 0.3s ease;
-            z-index: 1;
-        }
-
-        /* ========== SISTEMA DE TELAS ========== */
-        .tela {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            opacity: 0;
-            transform: translateY(100px) scale(0.98);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .tela.ativa {
-            opacity: 1;
-            transform: translateY(0px) scale(1);
-            pointer-events: auto;
-            z-index: 1;
-        }
-
-        /* ========== CONFIGURAÇÕES ESPECÍFICAS PARA PORTFÓLIO ========== */
-        /* Esconde elementos na tela de portfólio */
-        #tela-portfolio .logo-top-left,
-        #tela-portfolio .info-top-left,
-        #tela-portfolio .center-top,
-        #tela-portfolio .info-top-right,
-        #tela-portfolio .social-bar-left {
-            display: none !important;
-        }
-
-        /* Permite scroll apenas na tela de portfólio */
-        #tela-portfolio {
-            overflow-y: auto; /* Habilita scroll vertical */
-            overflow-x: hidden; /* Desabilita scroll horizontal */
-        }
-
-        /* Esconde a barra de scroll visualmente */
-        #tela-portfolio::-webkit-scrollbar {
-            display: none;
-        }
-
-        #tela-portfolio {
-            -ms-overflow-style: none; /* IE e Edge */
-            scrollbar-width: none; /* Firefox */
-        }
-
-        /* ========== ANIMAÇÃO GLITCH ========== */
-        @keyframes glitch-animation {
-            0% {
-                text-shadow: 2px 2px 0 #ff00c1, -2px -2px 0 #00fff2;
-                transform: translate(50%, -50%);
-            }
-            20% {
-                text-shadow: -2px -2px 0 #ff00c1, 2px 2px 0 #00fff2;
-            }
-            40% {
-                text-shadow: 2px -2px 0 #ff00c1, -2px 2px 0 #00fff2;
-            }
-            60% {
-                text-shadow: -1px 1px 0 #ff00c1, 1px -1px 0 #00fff2;
-            }
-            80% {
-                text-shadow: 1px -1px 0 #ff00c1, -1px 1px 0 #00fff2;
-            }
-            100% {
-                text-shadow: 2px 2px 0 #ff00c1, -2px -2px 0 #00fff2;
-                transform: translate(-50%, -50%);
-            }
-        }
-
-        /* ========== RESPONSIVIDADE ========== */
-        @media (max-width: 768px) {
-            /* Ajustes para telas menores */
-            .logo-top-left {
-                font-size: 32px;
-                top: 10px;
-                left: 43%;
-            }
-
-            /* Barra social em disposição horizontal na parte inferior */
-            .social-bar-left {
-                bottom: 10px;
-                top: auto;
-                left: 0;
-                right: 0;
-                flex-direction: row;
-                justify-content: center;
-                gap: 16px;
-                transform: none;
-            }
-
-            .social-bar-left a {
-                font-size: 24px;
-            }
-
-            /* Ajustes para elementos da tela de erro */
-            .error {
-                font-size: 80px;
-                top: 40%;
-                left: 40%;
-            }
-
-            .number {
-                font-size: 30px;
-                top: 60%;
-                left: 111%;
-            }
-
-            .portfolio-link {
-                font-size: 30px;
-                top: 52%;
-                left: 43%;
-                transform: translate(-50%, -50%) rotate(-5deg);
-            }
-            
-            /* Esconde textos informativos em mobile */
-            .info-top-left,
-            .center-top,
-            .info-top-right {
-                display: none;
-            }
-        }
-
-        /* ========== CARDS DO PORTFÓLIO ========== */
-        .cards-container {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 30px;
-            padding: 30px;
-            padding-bottom: 100px; /* Espaço extra na parte inferior */
-        }
-
-        /* Estilo base do card */
-        .card {
-            position: relative;
-            margin-top: 30px;
-            right: 20px;
-            width: 300px;
-            background: #fff;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            transition: all 0.5s ease;
-            border: 3px solid transparent;
-            transform: translateY(50px); /* Posição inicial para animação */
-            opacity: 0; /* Inicialmente invisível */
-        }
-
-        /* Estado visível do card (após animação) */
-        .card.visible {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* Imagem do card */
-        .card img {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        /* Área de texto do card */
-        .card-text {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .card-text h3 {
-            margin: 10px 0 5px;
-            font-size: 20px;
-            color: #333;
-        }
-
-        .card-text p {
-            font-size: 14px;
-            color: #666;
-        }
-
-        /* Efeito hover do card */
-        .card-hover {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            opacity: 0;
-            transition: all 0.5s ease;
-            font-size: 30px;
-            border-radius: 20px;
-        }
-
-        /* Efeitos ao passar o mouse no card */
-        .card:hover {
-            transform: scale(1.03);
-            border-color: #ff5e00;
-        }
-
-        .card:hover img {
-            transform: scale(1.1);
-        }
-
-        .card:hover .card-hover {
-            opacity: 1;
-            background: rgba(0,0,0,0.9);
-        }
-
-        /* Ícones dentro do hover */
-        .card-hover i {
-            transition: all 0.3s ease;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
-        }
-
-        .card-hover i:hover {
-            transform: scale(1.2);
-            color: #ff5e00;
-        }
-
-        /* Ajustes para mobile */
-        /* ========== RESPONSIVIDADE ========== */
-/* ========== AJUSTES ESPECÍFICOS PARA MOBILE ========== */
-@media (max-width: 768px) {
-    /* Esconde logo e barra social APENAS no mobile E APENAS na tela de portfólio */
-    body.mobile #tela-portfolio .logo-top-left,
-    body.mobile #tela-portfolio .social-bar-left {
-        display: none !important;
-    }
-
-    /* Ajuste da barra social para mobile */
-    body.mobile .social-bar-left {
-        bottom: 10px;
-        top: auto;
-        left: 0;
-        right: 0;
-        flex-direction: row;
-        justify-content: center;
-        gap: 16px;
-        transform: none;
-    }
-
-    /* Ajuste do logo para mobile */
-    body.mobile .logo-top-left {
-        left: 50%;
-        transform: translateX(-50%);
-    }
-    
-    /* Esconde textos informativos em mobile */
-    body.mobile .info-top-left,
-    body.mobile .center-top,
-    body.mobile .info-top-right {
-        display: none;
-    }
-}
-        /* ========== BOTÃO DE VOLTAR AO TOPO ========== */
-        .scroll-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #ff5e00;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        /* Estado visível do botão */
-        .scroll-to-top.visible {
-            opacity: 0.8;
-        }
-
-        /* Efeito hover */
-        .scroll-to-top:hover {
-            opacity: 1;
-            transform: translateY(-5px);
-        }
-
-        /* ========== TÍTULO DO PORTFÓLIO ========== */
-        .portfolio-title {
-            font-family: 'Hanuman', sans-serif;
-            font-size: 50px;
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(-50px);
-            transition: all 0.5s ease;
-            margin-top: 50px;
-        }
-
-        /* Estado visível do título */
-        .portfolio-title.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+footer{padding:72px 0 56px;border-top:1px solid var(--line)}
+footer h2{font-weight:800;font-size:clamp(36px,6vw,72px);line-height:1.05;letter-spacing:-.03em;margin-bottom:24px}
+.mail{font:18px var(--mono);color:var(--accent);border-bottom:1px solid var(--accent)}
+.social{display:flex;flex-wrap:wrap;gap:28px;margin-top:48px;font:14px var(--mono);color:var(--muted)}
+</style>
 </head>
 <body>
-    <!-- ========== ELEMENTOS DO CABEÇALHO ========== -->
-    <!-- Logo clicável -->
-    <div class="logo-top-left" onclick="trocarTela('tela-erro')">LM</div>
-    
-    <!-- Informações do lado esquerdo -->
-    <div class="info-top-left">
-        <span>Leonardo Marques<br><small>Web Developer</small></span>
-    </div>
-    
-    <!-- Texto central -->
-    <div class="center-top">Front End</div>
-    
-    <!-- Informações do lado direito -->
-    <div class="info-top-right">
-        <span>UI/UX<br><small>Designer</small></span>
-    </div>
+<div class="grid-bg" aria-hidden="true"></div>
+<div class="glow" id="glow" aria-hidden="true"></div>
 
-    <!-- Barra social lateral -->
-    <aside class="social-bar-left">
-        <a href="https://www.instagram.com/leommars/"><i class="fab fa-instagram"></i></a>
-        <a href="https://www.linkedin.com/in/leonardo-marques-bomtempo/"><i class="fab fa-linkedin-in"></i></a>
-        <a href="mailto:contato.leonardombs@gmail.com" target="_blank"><i class="fas fa-envelope"></i></a>
-        <a href="https://github.com/leommars"><i class="fab fa-github"></i></a>
-    </aside>
+<div class="wrap">
+<header>
+<a class="logo" href="#topo" aria-label="Início">leo<span>.</span>dev</a>
+<nav aria-label="Principal"><a href="#projetos">projetos</a><a href="#sobre">sobre</a><a href="#contato">contato</a></nav>
+</header>
+</div>
 
-    <!-- ========== TELA DE ERRO 404 ========== -->
-    <div id="tela-erro" class="content tela ativa">
-        <div class="fundo-blur"></div>
-        <h1 class="error">ERROR <span class="number">-404.</span></h1>
-        <!-- Link para acessar o portfólio -->
-        <a href="#" class="portfolio-link" onclick="trocarTela('tela-portfolio')">+(Portfolio-)</a>
-    </div>
+<main>
+<div class="hero" id="topo">
+<canvas id="rain" aria-hidden="true"></canvas>
+<div class="wrap">
+<div class="hero-in">
+<div class="hero-text">
+<p class="tag">// Web Developer · Front End · UI/UX</p>
+<h1>Leonardo<br>Marques</h1>
+<p class="lead">Desenvolvo interfaces rápidas, acessíveis e bem desenhadas — do layout no Figma ao código em produção.</p>
+<div class="btns"><a class="btn main" href="#projetos">Ver projetos</a><a class="btn" href="https://github.com/leommars">GitHub</a><a class="btn" href="https://drive.google.com/file/d/1dm2HyQzJghzhMgTviRqQDXM0Ns6Gn6jY/view?usp=drive_link" download="Curriculo-Leonardo-Marques.pdf">Baixar currículo</a></div>
+</div>
+<div class="code" aria-hidden="true">
+<div><i>const leonardo = {</i></div>
+<p>role: <b>"Front End + UI/UX"</b>,</p>
+<p>foco: <b>"performance &amp; acessibilidade"</b>,</p>
+<p>stack: <b>[ "HTML", "CSS", "JavaScript" ]</b>,</p>
+<p>disponivel: <b>true</b></p>
+<div><i>};</i></div>
+</div>
+</div>
+</div>
+</div>
 
-    <!-- ========== TELA DO PORTFÓLIO ========== -->
-    <section id="tela-portfolio" class="content tela">
-        <!-- Título da página de portfólio -->
-        <h2 class="portfolio-title"></h2>
-      
-        <!-- Container dos cards -->
-        <div class="cards-container">
-          <!-- Card 1 -->
-          <div class="card">
-            <img src="https://i.ibb.co/d4K9fsKM/Captura-de-tela-2025-04-15-002617.jpg" alt="Projeto 1">
-            <div class="card-text">
-              <h3>Projeto Responsivo</h3>
-              <p>Bio Link criado com foco em performance e acessibilidade.</p>
-            </div>
-            <!-- Ícones de tecnologias usadas (aparecem no hover) -->
-            <div class="card-hover">
-              <i class="fab fa-html5" title="HTML5"></i>
-              <i class="fab fa-css3-alt" title="CSS3"></i>
-              <i class="fab fa-js" title="JavaScript"></i>
-            </div>
-          </div>
-      
-          <!-- Card 2 -->
-          <div class="card">
-            <img src="https://i.ibb.co/BWCtYWw/Chat-GPT-Image-11-04-2025-20-30-38.png" alt="Projeto 2">
-            <div class="card-text">
-              <h3>E-commerce Moderno</h3>
-              <p>Loja virtual com filtro de produtos e carrinho animado.</p>
-            </div>
-            <div class="card-hover">
-              <i class="fab fa-react" title="React"></i>
-              <i class="fab fa-sass" title="SASS"></i>
-              <i class="fab fa-bootstrap" title="Bootstrap"></i>
-            </div>
-          </div>
-          
-          <!-- Adicione mais cards conforme necessário -->
-        </div>
-        
-        <!-- Botão para voltar ao topo -->
-        <div class="scroll-to-top" id="scroll-to-top">
-            <i class="fas fa-arrow-up"></i>
-        </div>
-    </section>
+<div class="wrap">
+<section id="projetos">
+<div class="head"><h2>Projetos selecionados</h2><span class="count">03 / código</span></div>
+<div class="cards">
+<article class="card">
+<div class="shot" style="background:#0C0D11"><img src="https://i.ibb.co/jk5gj1Cp/link-bio.png" alt="Link Hub MARX: página de links com foto, habilidades e botões, em versão desktop e mobile" style="object-fit:contain" loading="lazy"></div>
+<div class="body"><h3>Link Bio</h3><p>Bio Link criado com foco em performance e acessibilidade.</p><p class="stack">HTML · CSS · A11y</p><a class="more" href="https://marxlinks.netlify.app/" target="_blank" rel="noopener">ver projeto →</a></div>
+</article>
+<article class="card">
+<div class="shot"><img src="https://i.ibb.co/FkCJdw18/Interface-urbana-da-Monkey-Streetwear.png" alt="Imagem da loja virtual E-commerce Moderno" loading="lazy"></div>
+<div class="body"><h3>E-commerce Monkey</h3><p>Loja virtual com filtro de produtos e carrinho animado.</p><p class="stack">HTML · CSS · JavaScript</p><a class="more" href="https://lojamonkey.netlify.app/">ver projeto →</a></div>
+</article>
+<article class="card empty">
+<div class="shot">[ PRÓXIMO PROJETO ]</div>
+<div class="body"><h3> NOME DO PROJETO </h3><p> Uma linha sobre o problema e o resultado. </p><p class="stack"> TECNOLOGIAS </p></div>
+</article>
+</div>
+</section>
 
-    <script>
-        // ========== FUNÇÕES PRINCIPAIS ==========
-        
-        /**
-         * Troca entre as telas do site
-         * @param {string} idNova - ID da tela que será mostrada
-         */
-        function trocarTela(idNova) {
-            // Esconde todas as telas
-            const telas = document.querySelectorAll('.tela');
-            telas.forEach(tela => tela.classList.remove('ativa'));
+<section class="about" id="sobre">
+<h2>Código com olhar de designer.</h2>
+<p>Sou desenvolvedor web com foco em front end e UI/UX. Gosto de unir as duas pontas: pensar a interface e fazê-la funcionar bem em qualquer tela.</p>
+</section>
+</div>
+</main>
 
-            // Mostra a nova tela com um pequeno atraso para a transição CSS
-            const novaTela = document.getElementById(idNova);
-            setTimeout(() => {
-                novaTela.classList.add('ativa');
-                
-                // Se for a tela de portfólio, anima os elementos
-                if(idNova === 'tela-portfolio') {
-                    setTimeout(() => {
-                        animatePortfolio();
-                    }, 300);
-                    
-                    // Habilita scroll apenas na tela de portfólio
-                    document.body.style.overflow = 'hidden';
-                    novaTela.style.overflowY = 'auto';
-                } else {
-                    // Desabilita scroll nas outras telas
-                    document.body.style.overflow = 'hidden';
-                    novaTela.style.overflow = 'hidden';
-                }
-            }, 10);
-        }
+<div class="wrap">
+<footer id="contato">
+<h2>Vamos construir algo juntos?</h2>
+<a class="mail" href="mailto:leonardomb.dev@gmail.com">leonardomb.dev@gmail.com</a>
+<div class="social"><a href="https://drive.google.com/file/d/1dm2HyQzJghzhMgTviRqQDXM0Ns6Gn6jY/view?usp=drive_link" download="Curriculo-Leonardo-Marques.pdf">currículo (pdf)</a><a href="https://github.com/leommars">github</a><a href="https://www.linkedin.com/in/leonardo-marques-bomtempo/">linkedin</a><a href="https://www.instagram.com/leommars/">instagram</a></div>
+</footer>
+</div>
 
-        // ========== ANIMAÇÃO GLITCH ==========
-        const errorElement = document.querySelector('.error');
-        // Ativa animação quando o mouse entra no elemento
-        errorElement.addEventListener('mouseenter', () => {
-            errorElement.style.animation = 'glitch-animation 0.8s infinite';
-        });
-        // Para animação quando o mouse sai
-        errorElement.addEventListener('mouseleave', () => {
-            errorElement.style.animation = '';
-        });
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mouse = {x:-999,y:-999};
 
-        // ========== ANIMAÇÃO DO PORTFÓLIO ==========
-        /**
-         * Anima os elementos da página de portfólio (título e cards)
-         */
-        function animatePortfolio() {
-            const title = document.querySelector('.portfolio-title');
-            const cards = document.querySelectorAll('.card');
-            
-            // Mostra o título com animação
-            title.classList.add('visible');
-            
-            // Mostra cada card com um pequeno atraso entre eles (efeito cascata)
-            cards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.classList.add('visible');
-                }, index * 200);
-            });
-        }
+  /* brilho que segue o cursor */
+  var glow = document.getElementById('glow'), gx = innerWidth*.6, gy = innerHeight*.2, tx = gx, ty = gy;
+  addEventListener('pointermove', function(e){
+    tx = e.clientX; ty = e.clientY;
+    var r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+  });
+  function follow(){
+    gx += (tx-gx)*.08; gy += (ty-gy)*.08;
+    glow.style.setProperty('--x', gx+'px'); glow.style.setProperty('--y', gy+'px');
+    requestAnimationFrame(follow);
+  }
 
-        // ========== CONTROLE DO BOTÃO DE VOLTAR AO TOPO ==========
-        const scrollToTopBtn = document.getElementById('scroll-to-top');
-        
-        // Mostra/oculta o botão conforme a posição do scroll
-        window.addEventListener('scroll', () => {
-            if (document.getElementById('tela-portfolio').classList.contains('ativa')) {
-                if (document.getElementById('tela-portfolio').scrollTop > 300) {
-                    scrollToTopBtn.classList.add('visible');
-                } else {
-                    scrollToTopBtn.classList.remove('visible');
-                }
-            }
-        });
+  /* chuva de código no hero */
+  var canvas = document.getElementById('rain'), ctx = canvas.getContext('2d');
+  var chars = '01{}<>/=;()[]&#'.split(''), size = 18, drops = [], w = 0, h = 0, dpr = Math.min(devicePixelRatio||1, 2);
+  var accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#C6F432';
+  function resize(){
+    w = canvas.clientWidth; h = canvas.clientHeight;
+    canvas.width = w*dpr; canvas.height = h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    var cols = Math.ceil(w/size); drops = [];
+    for (var i=0;i<cols;i++) drops.push(Math.random()*-40);
+    ctx.font = '500 '+size+'px "JetBrains Mono", monospace';
+  }
+  var last = 0, visible = true;
+  function draw(t){
+    requestAnimationFrame(draw);
+    if (!visible || document.hidden || t-last < 60) return;
+    last = t;
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0,0,0,.14)'; ctx.fillRect(0,0,w,h);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = accent;
+    for (var i=0;i<drops.length;i++){
+      var x = i*size, y = drops[i]*size;
+      var near = Math.hypot(x-mouse.x, y-mouse.y) < 170;
+      ctx.globalAlpha = near ? 1 : .45;
+      ctx.fillText(chars[(Math.random()*chars.length)|0], x, y);
+      if (y > h && Math.random() > .975) drops[i] = 0;
+      drops[i] += near ? 1.6 : 1;
+    }
+    ctx.globalAlpha = 1;
+  }
+  resize(); addEventListener('resize', resize);
+  new IntersectionObserver(function(en){ visible = en[0].isIntersecting; }).observe(canvas);
 
-        // Comportamento ao clicar no botão
-        scrollToTopBtn.addEventListener('click', () => {
-            document.getElementById('tela-portfolio').scrollTo({
-                top: 0,
-                behavior: 'smooth' // Rolagem suave
-            });
-        });
-
-        // ========== INICIALIZAÇÃO ==========
-        // Se a página for recarregada já na tela de portfólio, anima os elementos
-        if(document.getElementById('tela-portfolio').classList.contains('ativa')) {
-            animatePortfolio();
-            document.getElementById('tela-portfolio').style.overflowY = 'auto';
-        }
-    </script>
-    <script>
-        // Detecta se é mobile e adiciona classe ao body
-        function detectMobile() {
-            if(window.innerWidth <= 768) {
-                document.body.classList.add('mobile');
-            } else {
-                document.body.classList.remove('mobile');
-            }
-        }
-    
-        // Executa ao carregar e ao redimensionar a tela
-        window.addEventListener('load', detectMobile);
-        window.addEventListener('resize', detectMobile);
-    </script>
+  if (reduce){
+    /* sem movimento: um quadro estático discreto */
+    ctx.fillStyle = accent; ctx.globalAlpha = .25;
+    for (var i=0;i<drops.length;i++) for (var j=0;j<(h/size/3);j++) ctx.fillText(chars[(Math.random()*chars.length)|0], i*size, Math.random()*h);
+    glow.style.setProperty('--x','60vw'); glow.style.setProperty('--y','20vh');
+  } else {
+    requestAnimationFrame(draw); requestAnimationFrame(follow);
+  }
+})();
+</script>
 </body>
 </html>
